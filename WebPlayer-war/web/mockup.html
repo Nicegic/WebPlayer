@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Mockup-Page</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body{
+                background-image: url(login.png);
+                background-size: 100%;
+            }
+            h1 {
+                color: white;
+            }
+            .bu {
+                float: left;
+                display: inline-block;
+                width: 140px;
+                background-color: orange;
+                border: none;
+                text-align: center;
+                font-size: 10px;
+                padding: 5px;
+                transition: all 0.8s;
+                cursor: pointer;
+            }
+            .bu span {
+                cursor: pointer;
+                display: inline-block;
+                position: relative;
+                transition: 0.8s;
+            }
+            .bu span:after {
+                content: '<<';
+                position: absolute;
+                opacity: 0;
+                top: 0;
+                left: 0px;
+                transition: 0.8s;
+            }
+            .bu:hover span {
+                padding-left: 15px;
+            }
+            .bu:hover span:after {
+                opacity: 1;
+                left: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <h1> Du hast die Mockup-Seite für eine Nutzung unseres Services ohne Anmeldung/Registrierung erreicht! </h1><br>
+        <form action="/Webplayer-web/" method="get">
+            <button class="bu"><span>zurück zur Login-Seite</span></button>
+        </form>
+    </body>
+</html>
