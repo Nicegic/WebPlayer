@@ -7,8 +7,6 @@ package data;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
@@ -21,13 +19,13 @@ public class Benutzer implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     private String id;
-    private String pwhash;
-    private String salt;
+    private byte[] pwhash;
+    private byte[] salt;
     private String email;    
     
     public Benutzer(){}
     
-    public Benutzer(String name, String pwhash, String salt, String email){
+    public Benutzer(String name, byte[] pwhash, byte[] salt, String email){
         this.id=name;
         this.pwhash=pwhash;
         this.salt=salt;
@@ -61,11 +59,11 @@ public class Benutzer implements Serializable {
         return true;
     }
     
-        public String getPwHash(){
+        public byte[] getPwHash(){
         return pwhash;
     }
     
-    public String getSalt(){
+    public byte[] getSalt(){
         return salt;
     }
     

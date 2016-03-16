@@ -185,23 +185,20 @@
 
             }
             function load_sign_up() {
-                var user = "<p> Username:</p><form><input type='text' name='username' class='boxnew' maxlength='30' required></form>";
-                var passwort = "<p> Passwort: </p><form><input type='passwort' name='passwort' class='boxnew' maxlength='20' required></form>";
-                var email = "<p> E-mail: </p><form><input type='email' class ='boxnew' name='email'></form>";
+                var user = "<form action='login' method='post'><input type='hidden' name='hidden' value='1'/><p> Username:</p><input type='text' name='username' class='boxnew' maxlength='30' required>";
+                var passwort = "<p> Passwort: </p><input type='password' name='password' class='boxnew' maxlength='20' required>";
+                var email = "<p> E-mail: </p><input type='email' class ='boxnew' name='email' required>";
                 var zuruck = "<button onclick ='zuruck();' class='buttonsnew groesseneuebuttons' type='button'><span>Zurück</span></button>";
-                var speichern = "<button class='buttons groesseneuebuttons' type='button'><span>Daten speichern</span></button>";
+                var speichern = "<button class='buttons groesseneuebuttons' type='submit'><span>Daten speichern</span></button></form>";
                 document.getElementById("loginarea").innerHTML = "<div id = 'login_box2'>" + user + passwort + email + zuruck + speichern + "</div";
             }
             ;
 
             function zuruck() {
-                var user = "<p> User:</p><form><input type='text' class='box'  name='username' maxlength='30' required></form>";
-                var password = "<p> Password: </p><form><input type='password' name='password' class='box' maxlength='20' required><br></form>";
-                var buttons = "<button class='buttons' type='button'><span>Login</span></button><button onclick='load_sing_up();' class='buttons' type='button' ><span>Sign up</span></button>";
+                var user = "<form action='login' method='post'><input type='hidden' name='hidden' value='2'/><p> User:</p><input type='text' class='box'  name='username' maxlength='30' required>";
+                var password = "<p> Password: </p><input type='password' name='password' class='box' maxlength='20' required><br>";
+                var buttons = "<button class='buttons' type='submit'><span>Login</span></button><button onclick='load_sign_up();' class='buttons' type='button' ><span>Sign up</span></button></form>";
                 var ohneAnmeldung = "<p><a href='mockup.html'><font color='white'>Weiter ohne Anmeldung</font></a></p>";
-
-
-
                 document.getElementById("loginarea").innerHTML = "<div id = 'login_box'>" + user + password + buttons + ohneAnmeldung + "</div>";
             }
         </script>
@@ -221,8 +218,9 @@
         </div>
         <div id="loginarea">		    
             <div id="login_box">
-                <form action="login" method="post">
-
+                <form action="login" name="login" method="post">
+                    
+                    <input type="hidden" name="hidden" value="2"/>
                     <!-- Username kann maximal 30 Zeichen enthalten -->
                     <p> User:</p>
                     <input type="text" class="box"  name="username" maxlength="30" required>
