@@ -185,7 +185,7 @@
 
             }
             function load_sign_up() {
-                var user = "<form action='login' method='post'><input type='hidden' name='hidden' value='1'/><p> Username:</p><input type='text' name='username' class='boxnew' maxlength='30' required>";
+                var user = "<form action='login' method='post'><input type='hidden' name='hidden' value='signup'/><p> Username:</p><input type='text' name='username' class='boxnew' maxlength='30' required>";
                 var passwort = "<p> Passwort: </p><input type='password' name='password' class='boxnew' maxlength='20' required>";
                 var email = "<p> E-mail: </p><input type='email' class ='boxnew' name='email' required>";
                 var zuruck = "<button onclick ='zuruck();' class='buttonsnew groesseneuebuttons' type='button'><span>Zurück</span></button>";
@@ -195,7 +195,7 @@
             ;
 
             function zuruck() {
-                var user = "<form action='login' method='post'><input type='hidden' name='hidden' value='2'/><p> User:</p><input type='text' class='box'  name='username' maxlength='30' required>";
+                var user = "<form action='login' method='post'><input type='hidden' name='hidden' value='login'/><p> User:</p><input type='text' class='box'  name='username' maxlength='30' required>";
                 var password = "<p> Password: </p><input type='password' name='password' class='box' maxlength='20' required><br>";
                 var buttons = "<button class='buttons' type='submit'><span>Login</span></button><button onclick='load_sign_up();' class='buttons' type='button' ><span>Sign up</span></button></form>";
                 var ohneAnmeldung = "<p><a href='mockup.html'><font color='white'>Weiter ohne Anmeldung</font></a></p>";
@@ -220,7 +220,7 @@
             <div id="login_box">
                 <form action="login" name="login" method="post">
                     
-                    <input type="hidden" name="hidden" value="2"/>
+                    <input type="hidden" name="hidden" value="login"/>
                     <!-- Username kann maximal 30 Zeichen enthalten -->
                     <p> User:</p>
                     <input type="text" class="box"  name="username" maxlength="30" required>

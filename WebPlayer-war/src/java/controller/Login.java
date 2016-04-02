@@ -60,19 +60,18 @@ public class Login extends HttpServlet {
         String username = request.getParameter("username");
         char[] password = request.getParameter("password").toCharArray();
         try {
-            if (action.equals("2")) {
+            if (action.equals("login")) {
                 byte[] pwhash = generatePwHash(username, password);
                 boolean logingranted = loginbean.checkAccess(username, pwhash);
                 if (logingranted) {
                     System.out.println("Login was successful!");
-                    Home home = new Home();
-                    home.doGet(request, response);
+                    request.getRequestDispatcher("home.jsp").forward(request, response);
                 } else {
                     System.out.println("Login was not successful!");
                     request.getRequestDispatcher("index.html").forward(request, response);
                     
                 }
-            } else if (action.equals("1")) {
+            } else if (action.equals("signup")) {
                 String email = request.getParameter("email");
                 byte[] salt = SecureRandom.getInstance("SHA1PRNG").generateSeed(32);
                 byte[] pwhash = generateNewPwHash(password, salt);
@@ -92,18 +91,18 @@ public class Login extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private byte[] generatePwHash(String username, char[] pw) throws InvalidKeySpecException, NoSuchAlgorithmException{
+    private byte[] generatePwHash(String username, char[] pw) throws InvalidKeySpecException, NoSuchAlgorithmException {
         byte[] salt = loginbean.getSalt(username);
         PBEKeySpec spec = new PBEKeySpec(pw, salt, 1, 128);
         return pwHash(spec);
     }
-    
-    private byte[] generateNewPwHash(char[] pw, byte[]salt) throws InvalidKeySpecException, NoSuchAlgorithmException{
+
+    private byte[] generateNewPwHash(char[] pw, byte[] salt) throws InvalidKeySpecException, NoSuchAlgorithmException {
         PBEKeySpec spec = new PBEKeySpec(pw, salt, 1, 128);
         return pwHash(spec);
     }
-    
-    private byte[] pwHash(PBEKeySpec spec)throws NoSuchAlgorithmException, InvalidKeySpecException{
+
+    private byte[] pwHash(PBEKeySpec spec) throws NoSuchAlgorithmException, InvalidKeySpecException {
         SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
         SecretKey key = skf.generateSecret(spec);
         byte[] res = key.getEncoded();

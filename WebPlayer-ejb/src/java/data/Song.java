@@ -29,19 +29,39 @@ public class Song implements Serializable {
     private double dauer;
     private int bewertungUser;
     private int bewertungGesamt;
+    private String imagepfad;
+    private String songpfad;
     
     public Song(){}
     
-    public Song(String name, String interpret, String album, String genre, double dauer){
+    public Song(String name, String interpret, String album, String genre, double dauer, String imagepfad, String songpfad){
         this.name=name;
         this.interpret=interpret;
         this.album=album;
         this.genre=genre;
         this.dauer=dauer;
+        this.imagepfad = imagepfad;
+        this.songpfad = songpfad;
     }
 
     public Long getId() {
         return id;
+    }
+    
+    public String getSongPfad() {
+        return songpfad;
+    }
+    
+    public String getImagePfad(){
+        return imagepfad;
+    }
+    
+    public void setSongPfad(String songpfad){
+        this.songpfad = songpfad;
+    }
+    
+    public void setImagePfad(String imagepfad){
+        this.imagepfad = imagepfad;
     }
 
     public String getName() {

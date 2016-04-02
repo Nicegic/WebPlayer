@@ -27,13 +27,11 @@
                 var tabelle="<table id=\"empfehlungen\"><tr><th>Empfehlungen</th></tr>";
                 for(var i=0; i<10; i++){
                     tabelle=tabelle+"<tr id=\""+i+"\" name=\"play\" value=\"play\" onclick=\"document.location='HomeServlet'\" method=\"post\">";
-                    var titel = "<td>Titel</td>";
-                    var interpret = "<td>Interpret</td>";
-                    var dauer = "<td>Dauer</td>";
-                    var genre = "<td>Genre</td>";
-                    var bewertung = "<td>Bewertung</td>";
+                    var infos = loadSuggest();
+                    if(infos == undefined)
+                        infos = "Fehler! Die Daten konnten nicht geladen werden!";
                     var buttons = "<td><button type=\"submit\" name=\"loeschen\" value=\"loeschen\">X</button></td>";
-                    tabelle=tabelle+titel+interpret+dauer+genre+bewertung+buttons+"</tr>";
+                    tabelle=tabelle+infos+buttons+"</tr>";
                 }
                 tabelle=tabelle+"</table>";
                 document.getElementById("empfehlungForm").innerHTML = tabelle;
@@ -53,6 +51,24 @@
                 tabelle=tabelle+"</table>";
                 document.getElementById("playlist").innerHTML = tabelle;
             };
+            function loadSuggest(){
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if(xhttp.readyState == 4 && xhttp.status == 200) {
+                        var text = xhttp.responseText;
+                        var xmlDoc = xhttp.responseXML;
+                        var dom = new DOMParser().parseFromString(xhttp.responseText, "text/html");
+                        var titel = "<td>"+dom.getElementsByTagName("titel")+"</td>";
+                        var interpret = "<td>"+dom.getElementsByTagName("interpret")+"</td>";
+                        var dauer = "<td>"+dom.getElementsByTagName("dauer")+"</td>";
+                        var genre = "<td>"+dom.getElementsByTagName("genre")+"</td>";
+                        var bewertung = "<td>"+dom.getElementsByTagName("bewertung")+"</td>";
+                        return titel+interpret+dauer+genre+bewertung;
+                    }
+                }
+                xhttp.open("GET", "HomeServlet", true);
+                xhttp.send();
+            }
         </script>
     </head>
     <body >
@@ -68,7 +84,7 @@
             <div id="informationen">        
                 <div class="abschnitt">
                     <form id="playlist" action="HomeServlet" method="post" autocomplete="off">
-                        <script type="text/javascript">buildTablePlaylist()();</script>
+                        <script type="text/javascript">buildTablePlaylist();</script>
                     </form>
                 </div>
                 <div class="abschnitt zwei">

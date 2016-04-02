@@ -5,8 +5,10 @@
  */
 package controller;
 
+import connect.HomeBeanLocal;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,15 +22,9 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "HomeServlet", urlPatterns = {"/HomeServlet"})
 public class HomeServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    @EJB
+    HomeBeanLocal homebean;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -37,7 +33,7 @@ public class HomeServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet HomeServlet</title>");            
+            out.println("<title>Servlet HomeServlet</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet HomeServlet at " + request.getContextPath() + "</h1>");
@@ -46,51 +42,47 @@ public class HomeServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String[] songinfo = homebean.loadSuggest();
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        out.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        out.append("<song>");
+        out.append("<titel>"+songinfo[0]+"</titel>");
+        out.append("<interpret>"+songinfo[1]+"</interpret>");
+        out.append("<dauer>"+songinfo[2]+"</dauer>");
+        out.append("<genre>"+songinfo[3]+"</genre<");
+        out.append("<bewertung>"+songinfo[4]+"</bewertung>");
+        out.append("</song>");
+        out.println();
+        out.flush();
+        System.out.println("Must have written HTTP-Response");
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String play = request.getParameter("play");
+        String clickid = request.getParameter("id");
+        int songID = Integer.parseInt(request.getParameter("songid"));
         String loeschen = request.getParameter("loeschen");
-        if(play == null){
-        
-        }
-        else if(play.equals("play")){
-            request.getRequestDispatcher("mockup.html").forward(request, response);
-        }
-        else{
+        if (play == null) {
+
+        } else if (play.equals("play")) {
+            if (clickid.matches("^r([0-9]||10)$")) {
+                homebean.playSong(0);
+            }
+        } else {
             processRequest(request, response);
         }
-        
-        if(loeschen == null){
-        
-        }
-        else if(loeschen.equals("loeschen")){
+
+        if (loeschen == null) {
+
+        } else if (loeschen.equals("loeschen")) {
             request.getRequestDispatcher("index.html").forward(request, response);
-        }
-        else{
+        } else {
             processRequest(request, response);
         }
     }
