@@ -6,6 +6,7 @@
 package connect;
 
 import data.Song;
+import java.text.DecimalFormat;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,54 +21,63 @@ public class HomeBean implements HomeBeanLocal {
     @PersistenceContext(unitName = "WebPlayer-ejbPU")
     EntityManager em;
     long[] recentlysuggested = new long[10];
-    int actindex=0;
+    int actindex = 0;
+    DecimalFormat dcf = new DecimalFormat("00.00 min");
 
     @Override
-    public String[] playSong(long songID) {
-        String[] songpfad= new String[4];
-        Song song = em.find(Song.class, songID);
+    public String loadSongInfo(String songname) {
+        StringBuffer info = new StringBuffer();
+        long songid = (long) em.createQuery("SELECT s.id FROM Song s WHERE s.name LIKE :songname").setParameter("songname", songname).getSingleResult();
+        Song song = em.find(Song.class, songid);
         if (song == null) {
-            songpfad = null;
         } else {
-            songpfad[0] = song.getSongPfad();
-            songpfad[1] = song.getName();
-            songpfad[2] = song.getInterpret();
-            songpfad[3] = "2015";
+            info.append("<td>" + song.getName() + "</td");
+            info.append("<td>" + song.getInterpret() + "</td>");
+            info.append("<td>" + song.getJahr() + "</td>");
         }
-        return songpfad;
+        return info.toString();
     }
 
     @Override
-    public String[] loadSuggest() {
-        String[] songinfo=null;
-        try{long max = (long)em.createQuery("SELECT MAX(s.id) FROM Song s").getSingleResult();
-        long index = (long) ((Math.random() * max) + 1);
-        /*while(checkUsed(index)){
-            index = (long) (Math.random() * max)+1);
+    public String loadSuggest(int rowid) {
+        StringBuilder info = new StringBuilder();
+        try {
+            long max = (long) em.createQuery("SELECT MAX(s.id) FROM Song s").getSingleResult();
+            long index = (long) ((Math.random() * max) + 1);
+            /*while(checkUsed(index)){
+             index = (long) (Math.random() * max)+1);
+             }
+             recentlysuggested[actindex]=index;
+             actindex++;
+             if(actindex>9)
+             actindex=0;                 --> aufgrund mangelnder Datengrundlage noch nicht aktiv
+             */
+            Song song = em.find(Song.class, index);
+            if (song == null) {
+                System.out.println("Keinen Song unter Index 1 gefunden!!!");
+            } else {
+                String dauer = dcf.format(song.getDauer());
+                dauer=dauer.replace(',', ':');
+                info.append("<td id=\"songname"+rowid+"\">" + song.getName() + "</td>");
+                info.append("<td>" + song.getInterpret() + "</td>");
+                info.append("<td>" + dauer + "</td>");
+                info.append("<td>" + song.getGenre() + "</td>");
+                info.append("<td>" + song.getBewertungGesamt() + "</td>");
+            }
+        } catch (Exception e) {
         }
-        recentlysuggested[actindex]=index;
-        actindex++;
-        if(actindex>9)
-            actindex=0;
-        */
-        Song song = em.find(Song.class, index);
-        if (song == null) {
-            System.out.println("Keinen Song unter Index 1 gefunden!!!");
-        } else {
-            songinfo=new String[5];
-            songinfo[0]=song.getName();
-            songinfo[1]=song.getInterpret();
-            songinfo[2]=""+song.getDauer();
-            songinfo[3]=song.getGenre();
-            songinfo[4]=""+song.getBewertungGesamt();
-        }
-        }catch(Exception e){}
-        return songinfo;
+        return info.toString();
     }
 
     @Override
-    public void playSuggest(int songID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String playSong(String songname) {
+        long songid = (long) em.createQuery("SELECT s.id FROM Song s WHERE s.name LIKE :songname").setParameter("songname", songname).getSingleResult();
+        Song song = em.find(Song.class, songid);
+        if (song == null) {
+            return "";
+        } else {
+            return song.getSongPfad();
+        }
     }
 
     @Override
@@ -89,10 +99,10 @@ public class HomeBean implements HomeBeanLocal {
     public void editPlaylist(int id, boolean remove) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    private boolean checkUsed(long index){
-        for(int i=0;i<10;i++){
-            if(recentlysuggested[i]==index){
+
+    private boolean checkUsed(long index) {
+        for (int i = 0; i < 10; i++) {
+            if (recentlysuggested[i] == index) {
                 return true;
             }
         }

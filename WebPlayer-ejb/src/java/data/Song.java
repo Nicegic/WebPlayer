@@ -26,6 +26,7 @@ public class Song implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private int jahr;
     private String name;
     private String interpret;
     private String album;
@@ -41,9 +42,10 @@ public class Song implements Serializable {
     
     public Song(){}
     
-    public Song(String name, String interpret, String album, String genre, double dauer, String imagepfad, String songpfad){
+    public Song(String name, String interpret, int jahr, String album, String genre, double dauer, String imagepfad, String songpfad){
         this.name=name;
         this.interpret=interpret;
+        this.jahr=jahr;
         this.album=album;
         this.genre=genre;
         this.dauer=dauer;
@@ -71,6 +73,14 @@ public class Song implements Serializable {
     
     public void setImagePfad(String imagepfad){
         this.imagepfad = imagepfad;
+    }
+    
+    public int getJahr() {
+        return jahr;
+    }
+
+    public void setJahr(int jahr) {
+        this.jahr = jahr;
     }
 
     public String getName() {

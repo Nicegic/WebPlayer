@@ -45,57 +45,42 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String[] songinfo = null;
+        int rowid = Integer.parseInt(request.getParameter("rowid"));
+        String info = null;
         try {
-            songinfo = homebean.loadSuggest();
+            info = homebean.loadSuggest(rowid);
         } catch (Exception e) {
         }
-        response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        out.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        out.append("<xml>");
-        if (songinfo == null || songinfo.length == 0) {
-            out.append("<td> Test </td>");
-            out.append("<td> Interpret </td>");
-            out.append("<td> 530 </td>");
-            out.append("<td> Testgenre </td>");
-            out.append("<td> 5.0 </td>");
+        if (info == null || info.length() == 0) {
+            out.append("<td> Fehler </td>");
+            out.append("<td> beim Erstellen </td>");
+            out.append("<td> der </td>");
+            out.append("<td> Empfehlungen! </td>");
+            out.append("<td> Bitte Seite neu laden! </td>");
         } else {
-            out.append("<titel>" + songinfo[0] + "</titel>");
-            out.append("<interpret>" + songinfo[1] + "</interpret>");
-            out.append("<dauer>" + songinfo[2] + "</dauer>");
-            out.append("<genre>" + songinfo[3] + "</genre<");
-            out.append("<bewertung>" + songinfo[4] + "</bewertung>");
+            out.append(info);
         }
-        out.append("</xml>");
         out.flush();
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String play = request.getParameter("play");
-        String clickid = request.getParameter("id");
-        int songID = Integer.parseInt(request.getParameter("songid"));
+        String play = request.getParameter("action");
+        String songname = request.getParameter("songname");
         String loeschen = request.getParameter("loeschen");
         PrintWriter pw = response.getWriter();
         if (play == null) {
 
+        } else if (play.equals("info")) {
+            pw.append(homebean.loadSongInfo(songname));
+            pw.flush();
         } else if (play.equals("play")) {
-            String[] songDetails = homebean.playSong(1);
-            pw.append(songDetails[0]);
-            pw.append("<td>" + songDetails[1] + "</td>");
-            pw.append("<td>" + songDetails[2] + "</td>");
-            pw.append("<td>" + songDetails[3] + "</td>");
+            pw.append(homebean.playSong(songname));
             pw.flush();
         } else {
             processRequest(request, response);
-        }
-
-        if (loeschen == null) {
-
-        } else if (loeschen.equals("loeschen")) {
-            request.getRequestDispatcher("index.html").forward(request, response);
         }
     }
 
