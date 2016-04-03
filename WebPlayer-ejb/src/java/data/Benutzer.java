@@ -6,8 +6,12 @@
 package data;
 
 import java.io.Serializable;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -21,7 +25,11 @@ public class Benutzer implements Serializable {
     private String id;
     private byte[] pwhash;
     private byte[] salt;
-    private String email;    
+    private String email;
+    @OneToMany(mappedBy = "nutzer")
+    private LinkedHashSet<Playlist> playlists;
+    @OneToMany(mappedBy = "nutzer")
+    private LinkedHashSet<Bewertung> bewertungen;
     
     public Benutzer(){}
     
@@ -30,9 +38,67 @@ public class Benutzer implements Serializable {
         this.pwhash=pwhash;
         this.salt=salt;
         this.email=email;
+        bewertungen = new LinkedHashSet();
+        playlists = new LinkedHashSet();
+        
     }
+
+    public void setBewertungen(LinkedHashSet<Bewertung> bewertungen) {
+        this.bewertungen = bewertungen;
+    }
+    
     public String getName() {
         return id;
+    }
+    
+    public LinkedHashSet<Playlist> getPlaylists(){
+        return playlists;
+    }
+    
+    public LinkedHashSet<Bewertung> getBewertungen(){
+        return bewertungen;
+    }
+    
+    public void addBewertung(Bewertung b){
+        bewertungen.add(b);
+    }
+    
+    public void removeBewertung(Bewertung b){
+        bewertungen.remove(b);
+    }
+    
+    public void addPlaylist(Playlist p){
+        playlists.add(p);
+    }
+    
+    public void removePlaylist(Playlist p){
+        playlists.remove(p);
+    }
+    
+    public void setPlaylists(LinkedHashSet<Playlist> playlists){
+        this.playlists = playlists;
+    }
+    
+    public Playlist getPlaylist(String name){
+        Iterator it = playlists.iterator();
+        while(it.hasNext()){
+            Playlist p = (Playlist)it.next();
+            if(p.getName().equals(name))
+                return p;
+        }
+        return null;
+    }
+    
+    public int BewertungForSong(Song song){
+        Iterator it = bewertungen.iterator();
+        while(it.hasNext()){
+            Bewertung now = (Bewertung)it.next();
+            Song songnow = now.getSong();
+            if(songnow.equals(song)){
+                return now.getBewertung();
+            }
+        }
+        return -1;
     }
 
     public void setName(String id) {

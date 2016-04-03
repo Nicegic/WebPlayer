@@ -22,50 +22,38 @@
             .zwei  { width: 50%; height: 30%; margin-top: 3%; overflow: hidden;}
             .clear { clear: both; }
         </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <script>
-            function buildTableEmpfehlungen(){
-                var tabelle="<table id=\"empfehlungen\"><tr><th>Empfehlungen</th></tr>";
-                for(var i=0; i<10; i++){
-                    tabelle=tabelle+"<tr id=\""+i+"\" name=\"play\" value=\"play\" onclick=\"document.location='HomeServlet'\" method=\"post\">";
-                    var infos = loadSuggest();
-                    if(infos == undefined)
-                        infos = "Fehler! Die Daten konnten nicht geladen werden!";
-                    var buttons = "<td><button type=\"submit\" name=\"loeschen\" value=\"loeschen\">X</button></td>";
-                    tabelle=tabelle+infos+buttons+"</tr>";
+            function buildEmpfehlungenRow() {
+                var xhttp = new XMLHttpRequest();
+                i = 0;
+                var buttons = "<td><button type=\"submit\" name=\"loeschen\" value=\"loeschen\">X</button></td>";
+                loadSuggest(xhttp);
+                xhttp.onreadystatechange = function () {
+                    if (xhttp.readyState == 4 && xhttp.status == 200) {
+                        document.getElementById(i).innerHTML = xhttp.responseText + buttons + "</tr>";
+                        i++;
+                    }
                 }
-                tabelle=tabelle+"</table>";
-                document.getElementById("empfehlungForm").innerHTML = tabelle;
-            };
-            function buildTablePlaylist(){
-                var tabelle="<table><th>Inhalt der Playlisten</th>";
-                for(var i=0; i<15; i++){
-                    tabelle=tabelle+"<tr id=\""+i+"\" name=\"play\" value=\"play\" onclick=\"document.location='HomeServlet'\" method=\"post\">";
+            }
+
+            function buildTablePlaylist() {
+                var tabelle = "<table><th>Inhalt der Playlisten</th>";
+                for (var i = 0; i < 15; i++) {
+                    tabelle = tabelle + "<tr id=p\"" + i + "\" name=\"play\" value=\"play\" onclick=\"document.location='HomeServlet'\" method=\"post\">";
                     var titel = "<td>Titel</td>";
                     var interpret = "<td>Interpret</td>";
                     var dauer = "<td>Dauer</td>";
                     var genre = "<td>Genre</td>";
                     var bewertung = "<td>Bewertung</td>";
                     var buttons = "<td><button type=\"submit\" name=\"play\" value=\"1\">></button><button type=\"submit\" name=\"loeschen\" value=\"loeschen\">X</button></td>";
-                    tabelle=tabelle+titel+interpret+dauer+genre+bewertung+buttons+"</tr>";
+                    tabelle = tabelle + titel + interpret + dauer + genre + bewertung + buttons + "</tr>";
                 }
-                tabelle=tabelle+"</table>";
+                tabelle = tabelle + "</table>";
                 document.getElementById("playlist").innerHTML = tabelle;
-            };
-            function loadSuggest(){
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function() {
-                    if(xhttp.readyState == 4 && xhttp.status == 200) {
-                        var text = xhttp.responseText;
-                        var xmlDoc = xhttp.responseXML;
-                        var dom = new DOMParser().parseFromString(xhttp.responseText, "text/html");
-                        var titel = "<td>"+dom.getElementsByTagName("titel")+"</td>";
-                        var interpret = "<td>"+dom.getElementsByTagName("interpret")+"</td>";
-                        var dauer = "<td>"+dom.getElementsByTagName("dauer")+"</td>";
-                        var genre = "<td>"+dom.getElementsByTagName("genre")+"</td>";
-                        var bewertung = "<td>"+dom.getElementsByTagName("bewertung")+"</td>";
-                        return titel+interpret+dauer+genre+bewertung;
-                    }
-                }
+            }
+            ;
+            function loadSuggest(xhttp) {
                 xhttp.open("GET", "HomeServlet", true);
                 xhttp.send();
             }
@@ -79,7 +67,38 @@
             <button id="logout" type="submit">Logout</button>
             <hr>
             <form id="empfehlungForm" action="HomeServlet" method="post" autocomplete="off">
-                <script type="text/javascript">buildTableEmpfehlungen();</script>
+                <table id="empfehlungen"><tr><th>Empfehlungen</th></tr>
+                    <tr id=0 name="play" value="play" onclick="document.location = 'HomeServlet'" method="post">
+                    <script type="text/javascript">buildEmpfehlungenRow();</script>
+                    </tr>   
+                    <tr id=1 name="play" value="play" onclick="document.location = 'HomeServlet'" method="post">
+                    <script type="text/javascript">buildEmpfehlungenRow();</script>
+                    </tr>
+                    <tr id=2 name="play" value="play" onclick="document.location = 'HomeServlet'" method="post">
+                    <script type="text/javascript">buildEmpfehlungenRow();</script>
+                    </tr>
+                    <tr id=3 name="play" value="play" onclick="document.location = 'HomeServlet'" method="post">
+                    <script type="text/javascript">buildEmpfehlungenRow();</script>
+                    </tr>
+                    <tr id=4 name="play" value="play" onclick="document.location = 'HomeServlet'" method="post">
+                    <script type="text/javascript">buildEmpfehlungenRow();</script>
+                    </tr>
+                    <tr id=5 name="play" value="play" onclick="document.location = 'HomeServlet'" method="post">
+                    <script type="text/javascript">buildEmpfehlungenRow();</script>
+                    </tr>
+                    <tr id=6 name="play" value="play" onclick="document.location = 'HomeServlet'" method="post">
+                    <script type="text/javascript">buildEmpfehlungenRow();</script>
+                    </tr>
+                    <tr id=7 name="play" value="play" onclick="document.location = 'HomeServlet'" method="post">
+                    <script type="text/javascript">buildEmpfehlungenRow();</script>
+                    </tr>
+                    <tr id=8 name="play" value="play" onclick="document.location = 'HomeServlet'" method="post">
+                    <script type="text/javascript">buildEmpfehlungenRow();</script>
+                    </tr>
+                    <tr id=9 name="play" value="play" onclick="document.location = 'HomeServlet'" method="post">
+                    <script type="text/javascript">buildEmpfehlungenRow();</script>
+                    </tr>
+                </table>
             </form>
             <div id="informationen">        
                 <div class="abschnitt">
@@ -89,10 +108,27 @@
                 </div>
                 <div class="abschnitt zwei">
                     <table id="player">
+                        <tr id="playerrow">
+                        <script>
+                            var xhttp = new XMLHttpRequest();
+                            xhttp.onreadystatechange = function () {
+                                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                                    document.getElementById("audio_with_controls").src = xhttp.responseText.substr(0, 23);
+                                    document.getElementById("playerrow").innerHTML = xhttp.responseText.substring(23, 81);
+                                }
+                            }
+                            xhttp.open("POST", "HomeServlet", true);
+                            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                            xhttp.send("songid=1&play=play");
+                        </script>
+                        </tr>
+                        <br>
                         <tr>
-                            <td>Titel</td>
-                            <td>Interpret</td>
-                            <td>Albumcover</td>
+                        <audio id="audio_with_controls" 
+                               controls
+                               src="songs/A_Piano_Piece.mp3" 
+                               type="audio/mp3">
+                        </audio>
                         </tr>
                         <tr>
                             <td><button type="submit"><<</button><button type="submit">&#9633</button><button type="submit">></button><button type="submit">>></button></td>

@@ -6,10 +6,14 @@
 package data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -27,10 +31,13 @@ public class Song implements Serializable {
     private String album;
     private String genre;
     private double dauer;
-    private int bewertungUser;
     private int bewertungGesamt;
     private String imagepfad;
     private String songpfad;
+    @ManyToMany(mappedBy = "songs")
+    private LinkedHashSet<Playlist> playlists;
+    @OneToMany(mappedBy = "song")
+    private ArrayList<Bewertung> bewertungen;
     
     public Song(){}
     
@@ -42,6 +49,8 @@ public class Song implements Serializable {
         this.dauer=dauer;
         this.imagepfad = imagepfad;
         this.songpfad = songpfad;
+        playlists = new LinkedHashSet();
+        bewertungen = new ArrayList();
     }
 
     public Long getId() {
@@ -80,6 +89,14 @@ public class Song implements Serializable {
         this.interpret = interpret;
     }
 
+    public LinkedHashSet<Playlist> getPlaylists() {
+        return playlists;
+    }
+
+    public void setPlaylists(LinkedHashSet<Playlist> playlists) {
+        this.playlists = playlists;
+    }
+
     public String getAlbum() {
         return album;
     }
@@ -104,12 +121,22 @@ public class Song implements Serializable {
         this.dauer = dauer;
     }
 
-    public int getBewertungUser() {
-        return bewertungUser;
+    public ArrayList<Bewertung> getBewertungen() {
+        return bewertungen;
     }
 
-    public void setBewertungUser(int bewertungUser) {
-        this.bewertungUser = bewertungUser;
+    public void setBewertungen(ArrayList<Bewertung> bewertungen) {
+        this.bewertungen = bewertungen;
+    }
+    
+    public void addBewertung(Bewertung b){
+        bewertungen.add(b);
+        berechneGesamtBewertung();
+    }
+    
+    public void removeBewertung(Bewertung b){
+        bewertungen.remove(b);
+        berechneGesamtBewertung();
     }
 
     public int getBewertungGesamt() {
@@ -120,7 +147,13 @@ public class Song implements Serializable {
         this.bewertungGesamt = bewertungGesamt;
     }
     
+    public void addToPlaylist(Playlist p){
+        playlists.add(p);
+    }
     
+    public void removeFromPlaylist(Playlist p){
+        playlists.remove(p);
+    }
 
     @Override
     public int hashCode() {
@@ -145,6 +178,17 @@ public class Song implements Serializable {
     @Override
     public String toString() {
         return "data.Song[ id=" + id + " ]";
+    }
+    
+    private void berechneGesamtBewertung(){
+        int sum=0;
+        for(int i=0;i<bewertungen.size();i++){
+            sum+=bewertungen.get(i).getBewertung();
+        }
+        if(bewertungen.size()>0)
+            bewertungGesamt=(sum/bewertungen.size());
+        else
+            bewertungGesamt=0;
     }
     
 }

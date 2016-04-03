@@ -60,16 +60,20 @@ public class Login extends HttpServlet {
         String username = request.getParameter("username");
         char[] password = request.getParameter("password").toCharArray();
         try {
+            boolean logingranted;
             if (action.equals("login")) {
                 byte[] pwhash = generatePwHash(username, password);
-                boolean logingranted = loginbean.checkAccess(username, pwhash);
+                if (pwhash == null) {
+                    logingranted = false;
+                } else {
+                    logingranted = loginbean.checkAccess(username, pwhash);
+                }
                 if (logingranted) {
                     System.out.println("Login was successful!");
                     request.getRequestDispatcher("home.jsp").forward(request, response);
                 } else {
                     System.out.println("Login was not successful!");
                     request.getRequestDispatcher("index.html").forward(request, response);
-                    
                 }
             } else if (action.equals("signup")) {
                 String email = request.getParameter("email");
@@ -93,6 +97,10 @@ public class Login extends HttpServlet {
 
     private byte[] generatePwHash(String username, char[] pw) throws InvalidKeySpecException, NoSuchAlgorithmException {
         byte[] salt = loginbean.getSalt(username);
+        if (salt == null) {
+            System.out.println("User is not existing!");
+            return null;
+        }
         PBEKeySpec spec = new PBEKeySpec(pw, salt, 1, 128);
         return pwHash(spec);
     }

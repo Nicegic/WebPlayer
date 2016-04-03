@@ -45,20 +45,30 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String[] songinfo = homebean.loadSuggest();
+        String[] songinfo = null;
+        try {
+            songinfo = homebean.loadSuggest();
+        } catch (Exception e) {
+        }
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         out.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        out.append("<song>");
-        out.append("<titel>"+songinfo[0]+"</titel>");
-        out.append("<interpret>"+songinfo[1]+"</interpret>");
-        out.append("<dauer>"+songinfo[2]+"</dauer>");
-        out.append("<genre>"+songinfo[3]+"</genre<");
-        out.append("<bewertung>"+songinfo[4]+"</bewertung>");
-        out.append("</song>");
-        out.println();
+        out.append("<xml>");
+        if (songinfo == null || songinfo.length == 0) {
+            out.append("<td> Test </td>");
+            out.append("<td> Interpret </td>");
+            out.append("<td> 530 </td>");
+            out.append("<td> Testgenre </td>");
+            out.append("<td> 5.0 </td>");
+        } else {
+            out.append("<titel>" + songinfo[0] + "</titel>");
+            out.append("<interpret>" + songinfo[1] + "</interpret>");
+            out.append("<dauer>" + songinfo[2] + "</dauer>");
+            out.append("<genre>" + songinfo[3] + "</genre<");
+            out.append("<bewertung>" + songinfo[4] + "</bewertung>");
+        }
+        out.append("</xml>");
         out.flush();
-        System.out.println("Must have written HTTP-Response");
     }
 
     @Override
@@ -68,12 +78,16 @@ public class HomeServlet extends HttpServlet {
         String clickid = request.getParameter("id");
         int songID = Integer.parseInt(request.getParameter("songid"));
         String loeschen = request.getParameter("loeschen");
+        PrintWriter pw = response.getWriter();
         if (play == null) {
 
         } else if (play.equals("play")) {
-            if (clickid.matches("^r([0-9]||10)$")) {
-                homebean.playSong(0);
-            }
+            String[] songDetails = homebean.playSong(1);
+            pw.append(songDetails[0]);
+            pw.append("<td>" + songDetails[1] + "</td>");
+            pw.append("<td>" + songDetails[2] + "</td>");
+            pw.append("<td>" + songDetails[3] + "</td>");
+            pw.flush();
         } else {
             processRequest(request, response);
         }
@@ -82,8 +96,6 @@ public class HomeServlet extends HttpServlet {
 
         } else if (loeschen.equals("loeschen")) {
             request.getRequestDispatcher("index.html").forward(request, response);
-        } else {
-            processRequest(request, response);
         }
     }
 

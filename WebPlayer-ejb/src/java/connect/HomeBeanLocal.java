@@ -14,7 +14,7 @@ import javax.ejb.Local;
 @Local
 public interface HomeBeanLocal {
     
-    public String playSong(int songID);
+    public String[] playSong(long songID);
     public String[] loadSuggest();
     public void playSuggest(int songID);
     public void loadPlaylist();
