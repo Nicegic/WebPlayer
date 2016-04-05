@@ -3,28 +3,40 @@
     <head>
         <meta charset="utf-8">
         <title>Musikplayer</title>
+        <link rel="icon" href="logo.png" type="image/x-icon">
         <style>
-            html, body {height: 100%; margin: 0; overflow: auto; padding: 0; position: relative; color: white; background-image: url("login.png");}
-            hr{color: white;}
+            html, body {height: 100%; overflow: auto; position: relative; color: white; background-image: url("login.png");}
+            hr{color: white;clear:both;margin-top:5%;}
+            h1{
+                float:left;
+                margin-right: 2%;
+            }
+            #logo{
+                float:left;
+                width:50px;
+                height:50px;
+            }
             #wrapper { bottom: 0; height: 100%; margin: 0 auto; position: relative; top: 0; width: 100%;}
-            td{/*border: 1px solid grey;opacity:0.8;*/text-align:center;}
+            td{text-align:center; padding-right: 5px;}
             tr{border: 1px solid grey; opacity:0.8;}
             th {padding-bottom: 20px;}
-            /*button[type="submit"]{border:4px solid rgb(255,96,80); background-color:red; border-radius:30px; color: white; width:40px; height:40px; font-size:15px;}*/
             div#button {
                 background:grey;
                 text-align: center;
             }
-            #search {position: absolute; top: 0; right: 0; margin: 1%;}
-            #logout{position: absolute; top: 0; right: 0; margin: 1%; margin-right: 11%;}
-            #textarea{position: absolute; top: 0; right: 0; margin: 1%; margin-right: 15%}
+            hr{
+                float:next;
+            }
+            #search {float:right; margin-top: 1%; margin-right:5%;}
+            #logout{float:right; margin-top: 1%; margin-right: 1%;}
+            #textarea{float:right; margin-top: 1%; margin-right: 1%;}
             #player{margin-right: 10%; width: 80%}
             #empfehlungForm{}
             #playlist{width:100%;}
             #empfehlungen {border: 3px solid grey; width: 80%; margin-left: 10%;}
             #informationen {position: absolute; border: 3px solid grey; width: 80%; margin-left: 10%; margin-top: 1%;/*margin-bottom: 10%;*/}
-            .abschnitt {float: left; width: 70%; height: 30%; /*overflow: scroll*/}
-            .zwei  { width: 30%; height: 30%; margin-top: 3%; overflow: hidden;}
+            .abschnitt {float: left; width: 60%; height: 30%; /*overflow: scroll*/}
+            .zwei  { width: 40%; height: 30%; margin-top: 3%; overflow: hidden;}
             .clear { clear: both; }
         </style>
         <script>
@@ -36,8 +48,9 @@
                         document.getElementById(rowid).innerHTML = xhttp.responseText + buttons + "</tr>";
                     }
                 }
-                xhttp.open("GET", "HomeServlet?rowid=" + rowid, true);
-                xhttp.send();
+                xhttp.open("POST", "home", true);
+                xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                xhttp.send("action=suggest&rowid="+rowid);
             }
 
             function buildTablePlaylist() {
@@ -63,9 +76,9 @@
                         document.getElementById("playerinfo").innerHTML = xhttp.responseText;
                     }
                 }
-                xhttp.open("POST", "HomeServlet", true);
+                xhttp.open("POST", "home", true);
                 xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xhttp.send("songname=" + songname + "&action=info");
+                xhttp.send("action=info&songname=" + songname);
             }
             function playSong(songname) {
                 var xhttp = new XMLHttpRequest();
@@ -75,9 +88,9 @@
                         document.getElementById("audio_with_controls").play();
                     }
                 }
-                xhttp.open("POST", "HomeServlet", true);
+                xhttp.open("POST", "home", true);
                 xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xhttp.send("songname=" + songname + "&action=play");
+                xhttp.send("action=play&songname=" + songname);
             }
             function playSuggest(rowid) {
                 var songname = document.getElementById("songname" + rowid).innerHTML;
@@ -89,12 +102,15 @@
     </head>
     <body >
         <div id="wrapper">
+            <header>
             <h1>SLAPMusic!</h1>
-            <div id="textarea">Test user</div>
+            <image id="logo" src="logo.png" alt="Logo not found!"/>
+            <button id="logout" onclick="document.location='index.html'">Logout</button>
+            <div id="textarea">${username}</div>
             <input id="search">
-            <button id="logout" type="submit">Logout</button>
+            </header>
             <hr>
-            <form id="empfehlungForm" action="HomeServlet" method="post" autocomplete="off">
+            <form id="empfehlungForm" action="home" method="post" autocomplete="off">
                 <table id="empfehlungen"><tr><th>Empfehlungen</th></tr>
                     <tr>
                         <th>Titel</th>
@@ -137,7 +153,7 @@
             </form>
             <div id="informationen">        
                 <div class="abschnitt">
-                    <form id="playlist" action="HomeServlet" method="post" autocomplete="off">
+                    <form id="playlist" action="home" method="post" autocomplete="off">
                         <script type="text/javascript">buildTablePlaylist();</script>
                     </form>
                 </div>

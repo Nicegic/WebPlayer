@@ -31,7 +31,7 @@ public class HomeBean implements HomeBeanLocal {
         Song song = em.find(Song.class, songid);
         if (song == null) {
         } else {
-            info.append("<td>" + song.getName() + "</td");
+            info.append("<td>" + song.getName() + "</td>");
             info.append("<td>" + song.getInterpret() + "</td>");
             info.append("<td>" + song.getJahr() + "</td>");
         }
