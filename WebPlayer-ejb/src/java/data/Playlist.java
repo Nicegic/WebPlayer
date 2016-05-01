@@ -47,6 +47,15 @@ public class Playlist implements Serializable{
         return song.getId();
     }
     
+    public String getSong(int position){
+        Iterator it = songs.iterator();
+        for(int i=0;i<position;i++){
+            it.next();
+        }
+        Song song = (Song) it.next();
+        return song.getName();
+    }
+    
     public Benutzer getUser(){
         return nutzer;
     }

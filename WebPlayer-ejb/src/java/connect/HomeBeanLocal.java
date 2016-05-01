@@ -18,8 +18,8 @@ public interface HomeBeanLocal {
     public String loadSuggest(int rowid);
     public String playSong(String songname);
     public void loadPlaylist();
-    public void loadPlaylist(int id);
-    public void playPlaylist(int id);
-    public void editPlaylist(int id, boolean remove);
+    public void loadPlaylist(String name, String username);
+    public String playPlaylist(String name, String username);
+    public void editPlaylist(String song, String username, boolean remove);
     
 }

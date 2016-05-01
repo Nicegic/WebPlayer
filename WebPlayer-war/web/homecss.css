@@ -1,0 +1,33 @@
+html, body {height: 100%; overflow: auto; position: relative; color: white; background-image: url("login.png");}
+            hr{color: white;clear:both;margin-top:5%;}
+            h1{
+                float:left;
+                margin-right: 2%;
+            }
+            #logo{
+                float:left;
+                width:50px;
+                height:50px;
+            }
+            #wrapper { bottom: 0; height: 100%; margin: 0 auto; position: relative; top: 0; width: 100%;}
+            td{text-align:center; padding-right: 5px;}
+            tr{border: 1px solid grey; opacity:0.8;}
+            th {padding-bottom: 20px;}
+            div#button {
+                background:grey;
+                text-align: center;
+            }
+            hr{
+                float:next;
+            }
+            #search {float:right; margin-top: 1%; margin-right:5%;}
+            #logout{float:right; margin-top: 1%; margin-right: 1%;}
+            #textarea{float:right; margin-top: 1%; margin-right: 1%;}
+            #player{margin-right: 10%; width: 80%}
+            #empfehlungForm{}
+            #playlist{width:100%;}
+            #empfehlungen {border: 3px solid grey; width: 80%; margin-left: 10%;}
+            #informationen {position: absolute; border: 3px solid grey; width: 80%; margin-left: 10%; margin-top: 1%;/*margin-bottom: 10%;*/}
+            .abschnitt {float: left; width: 60%; height: 30%; overflow: auto;}
+            .zwei  { width: 40%; height: 30%; margin-top: 3%;}
+            .clear { clear: both; }

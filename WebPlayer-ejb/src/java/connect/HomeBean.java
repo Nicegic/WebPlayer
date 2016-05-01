@@ -6,6 +6,7 @@
 package connect;
 
 import data.Song;
+import data.Playlist;
 import java.text.DecimalFormat;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -86,18 +87,27 @@ public class HomeBean implements HomeBeanLocal {
     }
 
     @Override
-    public void loadPlaylist(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void loadPlaylist(String name, String username) {
+        
     }
 
     @Override
-    public void playPlaylist(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String playPlaylist(String name, String username) {
+        long pid = (long)em.createQuery("SELECT id FROM Playlist p WHERE p.nutzer.id LIKE :username").setParameter("username", username).getSingleResult();
+        Playlist p = em.find(Playlist.class, pid);
+        return playSong(p.getSong(0));
     }
 
     @Override
-    public void editPlaylist(int id, boolean remove) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void editPlaylist(String songname, String username, boolean remove) {
+        long id = (long)em.createQuery("SELECT id FROM Song s WHERE s.name LIKE :songname").setParameter("songname",songname).getSingleResult();
+        Song s = em.find(Song.class, id);
+        long pid = (long)em.createQuery("SELECT id FROM Playlist p WHERE p.nutzer.id LIKE :username").setParameter("username", username).getSingleResult();
+        Playlist p = em.find(Playlist.class, pid);
+        if(remove)
+            p.removeSong(s);
+        else
+            p.addSong(s);
     }
 
     private boolean checkUsed(long index) {
