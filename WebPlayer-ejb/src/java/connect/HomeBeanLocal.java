@@ -14,12 +14,16 @@ import javax.ejb.Local;
 @Local
 public interface HomeBeanLocal {
     
-    public String loadSongInfo(String songname);
-    public String loadSuggest(int rowid);
-    public String playSong(String songname);
-    public void loadPlaylist();
-    public void loadPlaylist(int id);
-    public void playPlaylist(int id);
-    public void editPlaylist(int id, boolean remove);
+    public String loadSongInfo(long songid);
+    public String loadSuggestNew();
+    public String search(String search);
+    public String playSong(long songid);
+    public String loadPlaylists(String username);
+    public String showSongs();
+    public String loadPlaylist(long no, String username);
+    public void userLoggedIn(String username);
+    public void userLoggedOut(String username);
+    public void editPlaylist(long songid, long pid, String username, boolean remove);
+    public void addPlaylist(String username, String playlistname);
     
 }

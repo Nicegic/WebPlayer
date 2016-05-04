@@ -46,7 +46,7 @@ public class HomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.addHeader("username", request.getParameter("username"));
-        request.getRequestDispatcher("home.jsp").forward(request, response);
+        request.getRequestDispatcher("homepage.jsp").forward(request, response);
     }
 
     @Override
@@ -55,33 +55,62 @@ public class HomeServlet extends HttpServlet {
         String action = request.getParameter("action");
         PrintWriter pw = response.getWriter();
         if (action == null) {
-
-        } else if (action.equals("info")) {
-            String songname = request.getParameter("songname");
-            pw.append(homebean.loadSongInfo(songname));
+            
+        } else if(action.equals("login")){
+            String username=request.getParameter("username");
+            homebean.userLoggedIn(username);
+        }else if(action.equals("logout")){
+            String username=request.getParameter("username");
+            homebean.userLoggedOut(username);
+        }else if(action.equals("edit")){
+            request.getRequestDispatcher("playlistedit.jsp").forward(request, response);
+        }else if(action.equals("showsongs")){
+            pw.append(homebean.showSongs());
+            pw.flush();
+        }else if(action.equals("loadPlaylists")){
+            String username=request.getParameter("username");
+            pw.append(homebean.loadPlaylists(username));
+            pw.flush();
+        }else if(action.equals("loadplaylist")){
+            String username=request.getParameter("username");
+            long playlistno=Long.parseLong(request.getParameter("playlistno"));
+            pw.append(homebean.loadPlaylist(playlistno, username));
+            pw.flush();
+        }else if(action.equals("editplaylist")){
+            String username=request.getParameter("username");
+            
+        }else if(action.equals("addPlaylist")){
+            String username=request.getParameter("username");
+            String playlistname=request.getParameter("playlistname");
+            homebean.addPlaylist(username, playlistname);
+        }else if (action.equals("search")) {
+            request.getRequestDispatcher("searchresult.jsp").forward(request, response);
+        } else if(action.equals("searchresults")){
+            String search = request.getParameter("search");
+            pw.append(homebean.search(search));
+            pw.flush();
+        }else if (action.equals("info")) {
+            int songid = Integer.parseInt(request.getParameter("songid"));
+            pw.append(homebean.loadSongInfo((long) songid));
             pw.flush();
         } else if (action.equals("play")) {
-            String songname = request.getParameter("songname");
-            pw.append(homebean.playSong(songname));
+            int songid = Integer.parseInt(request.getParameter("songid"));
+            pw.append(homebean.playSong((long) songid));
             pw.flush();
         } else if (action.equals("suggest")) {
-            int rowid = Integer.parseInt(request.getParameter("rowid"));
             String info = null;
             try {
-                info = homebean.loadSuggest(rowid);
+                info = homebean.loadSuggestNew();
             } catch (Exception e) {
             }
-            PrintWriter out = response.getWriter();
             if (info == null || info.length() == 0) {
-                out.append("<td> Fehler </td>");
-                out.append("<td> beim Erstellen </td>");
-                out.append("<td> der </td>");
-                out.append("<td> Empfehlungen! </td>");
-                out.append("<td> Bitte Seite neu laden! </td>");
+                pw.append("<p> Fehler beim Erstellen</p>");
+                pw.append("<p> der Empfehlungen. </p>");
+                pw.append("<p> Bitte Seite neu laden! </p>");
             } else {
-                out.append(info);
+                pw.append(info);
             }
-            out.flush();
+            pw.flush();
         } else {
             processRequest(request, response);
         }
