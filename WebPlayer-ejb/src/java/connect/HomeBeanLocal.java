@@ -24,6 +24,5 @@ public interface HomeBeanLocal {
     public void userLoggedIn(String username);
     public void userLoggedOut(String username);
     public void editPlaylist(long songid, long pid, String username, boolean remove);
-    public void addPlaylist(String username, String playlistname);
-    
+    public void addPlaylist(String username, String playlistname);    
 }

@@ -74,9 +74,6 @@ public class Login extends HttpServlet {
                 } else {
                     System.out.println("Login was not successful!");
                     response.sendRedirect(request.getContextPath());
-                    /*response.addHeader("username",username);
-                    response.sendRedirect(request.getContextPath()+"/home?username="+username);
-                    //request.getRequestDispatcher("index.html").forward(request, response);*/
                 }
             } else if (action.equals("signup")) {
                 String email = request.getParameter("email");
@@ -85,7 +82,6 @@ public class Login extends HttpServlet {
                 String salts = new String(salt, StandardCharsets.UTF_8);
                 loginbean.register(username, pwhash, salt, email);
                 response.sendRedirect(request.getContextPath()+"/home?username="+username);
-                //request.getRequestDispatcher("home.jsp").forward(request, response);
             }
         } catch (InvalidKeySpecException ikse) {
             System.out.println("Falscher Key!");
