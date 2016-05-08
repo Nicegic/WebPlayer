@@ -39,129 +39,279 @@ public class Song implements Serializable {
     private LinkedHashSet<Playlist> playlists;
     @OneToMany(mappedBy = "song")
     private ArrayList<Bewertung> bewertungen;
-    
-    public Song(){}
-    
-    public Song(String name, String interpret, int jahr, String album, String genre, double dauer, String imagepfad, String songpfad){
-        this.name=name;
-        this.interpret=interpret;
-        this.jahr=jahr;
-        this.album=album;
-        this.genre=genre;
-        this.dauer=dauer;
+
+    public Song() {
+    }
+
+    /**
+     * erstellt einen neuen Song
+     *
+     * @param name --> Name des Songs
+     * @param interpret --> Interpret
+     * @param jahr --> Jahr der Veröffentlichung
+     * @param album --> Album
+     * @param genre --> Genre
+     * @param dauer --> Dauer des Songs
+     * @param imagepfad --> Pfad zum optionalen Album-/Songcover
+     * @param songpfad --> Pfad zur mp3-Datei
+     */
+    public Song(String name, String interpret, int jahr, String album, String genre, double dauer, String imagepfad, String songpfad) {
+        this.name = name;
+        this.interpret = interpret;
+        this.jahr = jahr;
+        this.album = album;
+        this.genre = genre;
+        this.dauer = dauer;
         this.imagepfad = imagepfad;
         this.songpfad = songpfad;
         playlists = new LinkedHashSet();
         bewertungen = new ArrayList();
     }
 
+    /**
+     * gibt die Songid zurück
+     *
+     * @return
+     */
     public Long getId() {
         return id;
     }
-    
+
+    /**
+     * gibt den Pfad zur Audiodatei zurück
+     *
+     * @return
+     */
     public String getSongPfad() {
         return songpfad;
     }
-    
-    public String getImagePfad(){
+
+    /**
+     * gibt den Pfad zum Coverbild zurück
+     *
+     * @return
+     */
+    public String getImagePfad() {
         return imagepfad;
     }
-    
-    public void setSongPfad(String songpfad){
+
+    /**
+     * setzt den Pfad zur Audiodatei neu
+     *
+     * @param songpfad
+     */
+    public void setSongPfad(String songpfad) {
         this.songpfad = songpfad;
     }
-    
-    public void setImagePfad(String imagepfad){
+
+    /**
+     * setzt den Pfad zum Coverbild neu
+     *
+     * @param imagepfad
+     */
+    public void setImagePfad(String imagepfad) {
         this.imagepfad = imagepfad;
     }
-    
+
+    /**
+     * gibt das Veröffentlichungsjahr zurück
+     *
+     * @return
+     */
     public int getJahr() {
         return jahr;
     }
 
+    /**
+     * setzt das Jahr neu
+     *
+     * @param jahr
+     */
     public void setJahr(int jahr) {
         this.jahr = jahr;
     }
 
+    /**
+     * gibt den Namen des Songs zurück
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * setzt den Namen des Songs neu
+     *
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * gibt den Namen des Interpreten zurück
+     *
+     * @return
+     */
     public String getInterpret() {
         return interpret;
     }
 
+    /**
+     * setzt den Namen des Interpreten neu
+     *
+     * @param interpret
+     */
     public void setInterpret(String interpret) {
         this.interpret = interpret;
     }
 
+    /**
+     * gibt eine Liste mit allen Playlists zurück, in denen der Song vorhanden
+     * ist
+     *
+     * @return
+     */
     public LinkedHashSet<Playlist> getPlaylists() {
         return playlists;
     }
 
+    /**
+     * setzt alle Playlists, in denen der Song vorhanden ist
+     *
+     * @param playlists
+     */
     public void setPlaylists(LinkedHashSet<Playlist> playlists) {
         this.playlists = playlists;
     }
 
+    /**
+     * gibt das Album zurück
+     *
+     * @return
+     */
     public String getAlbum() {
         return album;
     }
 
+    /**
+     * setzt das Album neu
+     *
+     * @param album
+     */
     public void setAlbum(String album) {
         this.album = album;
     }
 
+    /**
+     * gibt das Genre zurück
+     *
+     * @return
+     */
     public String getGenre() {
         return genre;
     }
 
+    /**
+     * setzt das Genre neu
+     *
+     * @param genre
+     */
     public void setGenre(String genre) {
         this.genre = genre;
     }
 
+    /**
+     * gibt die Dauer des Songs zurück
+     *
+     * @return
+     */
     public double getDauer() {
         return dauer;
     }
 
+    /**
+     * setzt die Dauer neu
+     *
+     * @param dauer
+     */
     public void setDauer(double dauer) {
         this.dauer = dauer;
     }
 
+    /**
+     * gibt alle zu diesem Song abgegebenen Bewertungen zurück
+     *
+     * @return
+     */
     public ArrayList<Bewertung> getBewertungen() {
         return bewertungen;
     }
 
+    /**
+     * setzt alle Bewertungen des Songs
+     *
+     * @param bewertungen
+     */
     public void setBewertungen(ArrayList<Bewertung> bewertungen) {
         this.bewertungen = bewertungen;
     }
-    
-    public void addBewertung(Bewertung b){
+
+    /**
+     * fügt eine neue Bewertung hinzu
+     *
+     * @param b
+     */
+    public void addBewertung(Bewertung b) {
         bewertungen.add(b);
         berechneGesamtBewertung();
     }
-    
-    public void removeBewertung(Bewertung b){
+
+    /**
+     * entfernt eine Bewertung
+     *
+     * @param b
+     */
+    public void removeBewertung(Bewertung b) {
         bewertungen.remove(b);
         berechneGesamtBewertung();
     }
 
+    /**
+     * berechnet aus allen Bewertungen eine Gesamtbewertung
+     *
+     * @return
+     */
     public int getBewertungGesamt() {
         return bewertungGesamt;
     }
 
+    /**
+     * setzt die Gesamtbewertung
+     *
+     * @param bewertungGesamt
+     */
     public void setBewertungGesamt(int bewertungGesamt) {
         this.bewertungGesamt = bewertungGesamt;
     }
-    
-    public void addToPlaylist(Playlist p){
+
+    /**
+     * fügt einen Verweis auf eine neue Playlist hinzu, in der der Song vorkommt
+     *
+     * @param p
+     */
+    public void addToPlaylist(Playlist p) {
         playlists.add(p);
     }
-    
-    public void removeFromPlaylist(Playlist p){
+
+    /**
+     * entfernt einen Verweis auf eine Playlist, in der der Song nicht mehr
+     * vorkommt
+     *
+     * @param p
+     */
+    public void removeFromPlaylist(Playlist p) {
         playlists.remove(p);
     }
 
@@ -189,16 +339,17 @@ public class Song implements Serializable {
     public String toString() {
         return "data.Song[ id=" + id + " ]";
     }
-    
-    private void berechneGesamtBewertung(){
-        int sum=0;
-        for(int i=0;i<bewertungen.size();i++){
-            sum+=bewertungen.get(i).getBewertung();
+
+    private void berechneGesamtBewertung() {
+        int sum = 0;
+        for (int i = 0; i < bewertungen.size(); i++) {
+            sum += bewertungen.get(i).getBewertung();
         }
-        if(bewertungen.size()>0)
-            bewertungGesamt=(sum/bewertungen.size());
-        else
-            bewertungGesamt=0;
+        if (bewertungen.size() > 0) {
+            bewertungGesamt = (sum / bewertungen.size());
+        } else {
+            bewertungGesamt = 0;
+        }
     }
-    
+
 }

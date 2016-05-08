@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 /**
  *
@@ -19,6 +18,7 @@ import javax.persistence.OneToOne;
  */
 @Entity
 public class Bewertung implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,53 +31,100 @@ public class Bewertung implements Serializable {
 
     public Bewertung() {
     }
-    
-    public Bewertung(Song song, Benutzer benutzer, int bewertung){
-        this.song=song;
+
+    /**
+     * erstellt eine neue Bewertung
+     *
+     * @param song --> Song, zu dem die Bewertung abgegeben wurde
+     * @param benutzer --> Benutzer, der die Bewertung abgegeben hat
+     * @param bewertung --> 1-5
+     */
+    public Bewertung(Song song, Benutzer benutzer, int bewertung) {
+        this.song = song;
         this.nutzer = benutzer;
-        this.bewertung=bewertung;
+        this.bewertung = bewertung;
     }
 
+    /**
+     * gibt die ID der Bewertung zurück
+     *
+     * @return
+     */
     public Long getId() {
         return id;
     }
-    
-    public int getBewertung(){
+
+    /**
+     * gibt die Bewertung zurück (1-5)
+     *
+     * @return
+     */
+    public int getBewertung() {
         return bewertung;
     }
-    
-    public Benutzer getNutzer(){
+
+    /**
+     * gibt den benutzer zurück, der die Bewertung abgegeben hat
+     *
+     * @return
+     */
+    public Benutzer getNutzer() {
         return nutzer;
     }
-    
-    public Song getSong(){
+
+    /**
+     * gibt den Song zurück, zu dem die Bewertung abgegeben wurde
+     *
+     * @return
+     */
+    public Song getSong() {
         return song;
     }
-    
-    public long getSongID(){
+
+    /**
+     * gibt die ID des Songs zurück
+     *
+     * @return
+     */
+    public long getSongID() {
         return song.getId();
     }
 
+    /**
+     * setzt die ID
+     *
+     * @param id
+     */
     public void setId(Long id) {
         this.id = id;
     }
-    
+
+    /**
+     * setzt den Song
+     *
+     * @param song
+     */
     public void setSong(Song song) {
         this.song = song;
     }
 
+    /**
+     * setzt den User
+     *
+     * @param nutzer
+     */
     public void setNutzer(Benutzer nutzer) {
         this.nutzer = nutzer;
     }
-    
-    public void setBewertung(int bewertungneu){
+
+    /**
+     * setzt den Wert der Bewertung
+     *
+     * @param bewertungneu
+     */
+    public void setBewertung(int bewertungneu) {
         bewertung = bewertungneu;
     }
-    
-    
-    
-    
-    
 
     @Override
     public int hashCode() {
@@ -103,5 +150,5 @@ public class Bewertung implements Serializable {
     public String toString() {
         return "data.Bewertung[ id=" + id + " ]";
     }
-    
+
 }
