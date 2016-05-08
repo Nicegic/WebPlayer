@@ -185,105 +185,21 @@
                 }
 
             }
-<<<<<<< HEAD
             function load_sign_up() {
                 var user = "<form action='login' method='post'><input type='hidden' name='hidden' value='signup'/><p> Username:</p><input type='text' name='username' class='boxnew' maxlength='30' required>";
                 var passwort = "<p> Passwort: </p><input type='password' name='password' class='boxnew' maxlength='20' required>";
                 var email = "<p> E-mail: </p><input type='email' class ='boxnew' name='email' required>";
                 var zuruck = "<button onclick ='zuruck();' class='buttonsnew groesseneuebuttons' type='button'><span>Zurück</span></button>";
                 var speichern = "<button class='buttons groesseneuebuttons' type='submit'><span>Daten speichern</span></button></form>";
-                document.getElementById("loginarea").innerHTML = "<div id = 'login_box2'>" + user + passwort + email + zuruck + speichern + "</div";
+                document.getElementById("loginarea").innerHTML = "<div id = 'login_box2'>" + user + passwort + email + zuruck + speichern + "</div>";
             }
-            ;
 
             function zuruck() {
                 var user = "<form action='login' method='post'><input type='hidden' name='hidden' value='login'/><p> User:</p><input type='text' class='box'  name='username' maxlength='30' required>";
                 var password = "<p> Password: </p><input type='password' name='password' class='box' maxlength='20' required><br>";
                 var buttons = "<button class='buttons' type='submit'><span>Login</span></button><button onclick='load_sign_up();' class='buttons' type='button' ><span>Sign up</span></button></form>";
                 var ohneAnmeldung = "<p><a href='mockup.html'><font color='white'>Weiter ohne Anmeldung</font></a></p>";
-                document.getElementById("loginarea").innerHTML = "<div id = 'login_box'>" + user + password + buttons + ohneAnmeldung + "</div>";
-=======
-        function load_sing_up(){
-            var data_file = "loginJSON.json";
-            var http_request = new XMLHttpRequest();
-            try{
-               // Opera 8.0+, Firefox, Chrome, Safari
-               http_request = new XMLHttpRequest();
-            }catch (e){
-               // Internet Explorer Browsers
-               try{
-                  http_request = new ActiveXObject("Msxml2.XMLHTTP");
-					
-               }catch (e) {
-				
-                  try{
-                     http_request = new ActiveXObject("Microsoft.XMLHTTP");
-                  }catch (e){
-                     // Something went wrong
-                     alert("Your browser broke!");
-                     return false;
-                  }
-					
-               } 
-                }
-			
-            http_request.onreadystatechange = function(){
-			
-              if (http_request.readyState ==4){
-                  // Javascript function JSON.parse to parse JSON data
-                  var jsonObj = JSON.parse(http_request.responseText);
-
-                  // jsonObj variable now contains the data structure and can
-                  // be accessed as jsonObj.name and jsonObj.country.
-                  document.getElementById("loginarea").innerHTML = jsonObj.login;
-               }
-            }
-			
-            http_request.open("GET", data_file, true);
-            http_request.send();
-
-            };
-
-            function zuruck(){
-                
-            var data_file = "loginJSON.json";
-            var http_request = new XMLHttpRequest();
-            try{
-               // Opera 8.0+, Firefox, Chrome, Safari
-               http_request = new XMLHttpRequest();
-            }catch (e){
-               // Internet Explorer Browsers
-               try{
-                  http_request = new ActiveXObject("Msxml2.XMLHTTP");
-					
-               }catch (e) {
-				
-                  try{
-                     http_request = new ActiveXObject("Microsoft.XMLHTTP");
-                  }catch (e){
-                     // Something went wrong
-                     alert("Your browser broke!");
-                     return false;
-                  }
-					
-               } 
-                }
-			
-            http_request.onreadystatechange = function(){
-			
-              if (http_request.readyState ==4){
-                  // Javascript function JSON.parse to parse JSON data
-                  var jsonObj = JSON.parse(http_request.responseText);
-
-                  // jsonObj variable now contains the data structure and can
-                  // be accessed as jsonObj.name and jsonObj.country.
-                  document.getElementById("loginarea").innerHTML = jsonObj.sing_up;
-               }
-            }
-			
-            http_request.open("GET", data_file, true);
-            http_request.send();
->>>>>>> refs/remotes/origin/master
+                document.getElementById("loginarea").innerHTML = "<div id = 'login_box'>" + user + password + buttons + ohneAnmeldung + "</div>"
             }
         </script>
 
