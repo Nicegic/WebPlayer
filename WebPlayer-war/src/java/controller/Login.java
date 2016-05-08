@@ -1,7 +1,5 @@
 package controller;
 
-
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -32,7 +30,7 @@ public class Login extends HttpServlet {
 
     @EJB
     LoginBeanLocal loginbean;
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -58,27 +56,33 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("id");
+        String action = request.getParameter("hidden");
         String username = request.getParameter("username");
         char[] password = request.getParameter("password").toCharArray();
-        final int keyLength = 256;
         try {
-            byte[] salt = SecureRandom.getInstance("SHA1PRNG").generateSeed(32);
-            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
-            PBEKeySpec spec = new PBEKeySpec(password, salt, 1, keyLength);
-            SecretKey key = skf.generateSecret(spec);
-            byte[] res = key.getEncoded();
-            String pwhash = new String(res, StandardCharsets.UTF_8);
-            String salts = new String(salt, StandardCharsets.UTF_8);
-            boolean logingranted = loginbean.checkAccess(username, pwhash);
-            if (logingranted) {
-                System.out.println("Login was successful!");
-                request.getRequestDispatcher("home.jsp").forward(request, response);
-            } else {
-                System.out.println("Login was not successful!");
-                request.getRequestDispatcher("home.jsp").forward(request, response);
+            boolean logingranted;
+            if (action.equals("login")) {
+                byte[] pwhash = generatePwHash(username, password);
+                if (pwhash == null) {
+                    logingranted = false;
+                } else {
+                    logingranted = loginbean.checkAccess(username, pwhash);
+                }
+                if (logingranted) {
+                    System.out.println("Login was successful!");
+                    response.sendRedirect(request.getContextPath()+"/home?username="+username);
+                } else {
+                    System.out.println("Login was not successful!");
+                    response.sendRedirect(request.getContextPath());
+                }
+            } else if (action.equals("signup")) {
+                String email = request.getParameter("email");
+                byte[] salt = SecureRandom.getInstance("SHA1PRNG").generateSeed(32);
+                byte[] pwhash = generateNewPwHash(password, salt);
+                String salts = new String(salt, StandardCharsets.UTF_8);
+                loginbean.register(username, pwhash, salt, email);
+                response.sendRedirect(request.getContextPath()+"/home?username="+username);
             }
-            request.getRequestDispatcher("home.jsp").forward(request, response);
         } catch (InvalidKeySpecException ikse) {
             System.out.println("Falscher Key!");
         } catch (NoSuchAlgorithmException nsae) {
@@ -91,4 +95,25 @@ public class Login extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    private byte[] generatePwHash(String username, char[] pw) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        byte[] salt = loginbean.getSalt(username);
+        if (salt == null) {
+            System.out.println("User is not existing!");
+            return null;
+        }
+        PBEKeySpec spec = new PBEKeySpec(pw, salt, 1, 128);
+        return pwHash(spec);
+    }
+
+    private byte[] generateNewPwHash(char[] pw, byte[] salt) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        PBEKeySpec spec = new PBEKeySpec(pw, salt, 1, 128);
+        return pwHash(spec);
+    }
+
+    private byte[] pwHash(PBEKeySpec spec) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
+        SecretKey key = skf.generateSecret(spec);
+        byte[] res = key.getEncoded();
+        return res;
+    }
 }

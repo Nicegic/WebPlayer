@@ -7,6 +7,8 @@ package connect;
 
 import javax.ejb.Stateless;
 import data.Benutzer;
+import java.util.Arrays;
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -16,27 +18,34 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 public class LoginBean implements LoginBeanLocal {
-    @PersistenceContext(unitName="WebPlayer-ejbPU") EntityManager em;
-    
-    @Override
-    public boolean checkAccess(String username, String pwhash){
-        Benutzer actUser = em.find(Benutzer.class, username);
-        if(pwhash.equals(actUser.getPwHash()))
-            return true;
-        else
-            return false;
-    }
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+
+    @PersistenceContext(unitName = "WebPlayer-ejbPU")
+    EntityManager em;
 
     @Override
-    public boolean register(Benutzer user) {
-        Benutzer actUser = user;
-        if(!actUser.getName().equals(user.getName())){
-            em.persist(actUser);
-            return true;
-        }else
+    public boolean checkAccess(String username, byte[] pwhash) {
+        Benutzer actUser = em.find(Benutzer.class, username);
+        if (actUser == null) {
             return false;
+        }
+        return Arrays.equals(pwhash, actUser.getPwHash());
+    }
+
+    @Override
+
+    public byte[] getSalt(String username) {
+        Benutzer actUser = em.find(Benutzer.class, username);
+        if (actUser == null) {
+            return null;
+        } else {
+            return actUser.getSalt();
+        }
+    }
+
+    @Override
+    public void register(String username, byte[] pwhash, byte[] salt, String email) throws EntityExistsException {
+        Benutzer actUser = new Benutzer(username, pwhash, salt, email);
+        em.persist(actUser);
     }
 
     @Override

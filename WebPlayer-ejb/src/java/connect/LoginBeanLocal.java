@@ -7,6 +7,7 @@ package connect;
 
 import javax.ejb.Local;
 import data.Benutzer;
+import javax.persistence.EntityExistsException;
 
 /**
  *
@@ -14,8 +15,9 @@ import data.Benutzer;
  */
 @Local
 public interface LoginBeanLocal {
-    public boolean checkAccess(String username, String pwhash);
-    public boolean register(Benutzer user);
+    public boolean checkAccess(String username, byte[] pwhash);
+    public void register(String username, byte[] pwhash, byte[] salt, String email) throws EntityExistsException;
+    public byte[] getSalt(String username);
     public Benutzer find(Benutzer user);
     public void remove(Benutzer user);
     public void changeAddress(String email);
